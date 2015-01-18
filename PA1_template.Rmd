@@ -24,12 +24,12 @@ stepsPerDay <- tapply(activity$steps,activity$date, sum)
 hist(stepsPerDay,col='red',main = "Histogram of steps per day")
 ```
 
-mean steps per day: 
+__mean__ steps per day: 
 ```{r}
 meanPerDay <- mean(stepsPerDay,na.rm=T)
 meanPerDay
 ```
-median steps per day:
+__median__ steps per day:
 ```{r}
 medianPerDay <- median(stepsPerDay,na.rm=T)
 medianPerDay
@@ -51,7 +51,7 @@ plot(meanStepsPerInterval,
 
 ```
 
-5-minute interval contains the maximum number of steps
+5-minute interval contains the maximum number of steps:
 ```{r }
 maxInterval <- meanStepsPerInterval$interval[match(max(
   meanStepsPerInterval$steps),meanStepsPerInterval$steps)]
@@ -59,21 +59,21 @@ maxInterval
 ```
 
 ## Imputing missing values
-number of rows with missing values
+number of rows with missing values:
 
 ```{r}
 missing <- sum(!complete.cases(activity))
 missing 
 ```
 
-filling in all of the missing values in the dataset (using mean 5-minute intervals)
+filling in all of the missing values in the dataset (using mean 5-minute intervals):
 ```{r}
 activity.complete <- activity
 na.steps<-is.na(activity.complete$steps)
 activity.complete$steps[na.steps] <- meanStepsPerInterval$steps[
   match(activity.complete$interval[na.steps],meanStepsPerInterval$interval)]
 ```
-Histogram of the total number of steps taken each day
+Histogram of the total number of steps taken each day:
 ```{r}
 # histogram of the total number of steps taken each day
 stepsPerDay.complete <- tapply(activity.complete$steps,activity.complete$date, sum)
@@ -81,12 +81,12 @@ hist(stepsPerDay.complete, col='red')
 ```
 
 ####Mean and median after filling missing value
-mean:
+new __mean__:
 ```{r}
 meanPerDay.complete <- mean(stepsPerDay.complete,na.rm=T)
 meanPerDay.complete
 ```
-median:
+new __median__:
 ```{r}
 medianPerDay.complete <- median(stepsPerDay.complete,na.rm=T)
 medianPerDay.complete
