@@ -52,7 +52,8 @@ meanStepsPerInterval <- aggregate(steps ~ interval, data = activity,
                                   FUN = mean,
                                   na.rm = T)
 
-#plotting 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+#plotting 5-minute interval (x-axis) and the average number of steps taken,
+#averaged across all days (y-axis)
 plot(meanStepsPerInterval,
      type = "l",
      main = "Average interval activity due day")
@@ -63,7 +64,8 @@ plot(meanStepsPerInterval,
 5-minute interval contains the maximum number of steps
 
 ```r
-maxInterval <- meanStepsPerInterval$interval[match(max(meanStepsPerInterval$steps),meanStepsPerInterval$steps)]
+maxInterval <- meanStepsPerInterval$interval[match(max(
+  meanStepsPerInterval$steps),meanStepsPerInterval$steps)]
 maxInterval
 ```
 
