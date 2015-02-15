@@ -9,6 +9,7 @@ output:
 ## Loading and preprocessing the data
 setting __filePath__ and reading the table:
 ```{r }
+Sys.setlocale("LC_ALL","eng")
 filePath <- "activity.csv"
 activity <- read.table(filePath, na.strings='NA', sep=',', header=T, 
                        colClasses=c("numeric","Date","numeric") )
@@ -107,18 +108,11 @@ activityByDay <-split(activity,activity$day)
 Plotting number of steps depending on day of week
 
 ```{r }
-plot(aggregate(steps ~ interval, data = activityByDay$weekday,  mean,na.rm = T),
-      type="l",
-      main="Weekend",
-      ylab="Number of steps"
-     )
+library(dplyr)
+library(ggplot2)
+activityByDay <- group_by(activity, day,interval)
+activityByDay <-summarise(activityByDay,steps=sum(steps,na.rm=T))
+qplot(interval,steps,data=activityByDay,facets=day~.,geom="line")
+
 ```
-
-```{r }
-plot(aggregate(steps ~ interval, data = activityByDay$weekday, mean,na.rm = T),
-  type="l",
-  main="Weekday",
-  ylab="Number of steps")
-``` 
-
 
