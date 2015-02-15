@@ -1,16 +1,30 @@
 # Reproducible Research: Peer Assessment 1
-
-
-## Loading and preprocessing the data
-setting __filePath__ and reading the table:
+Loading librarys and setting some settings
 
 ```r
+library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following object is masked from 'package:stats':
+## 
+##     filter
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
+library(ggplot2)
 Sys.setlocale("LC_ALL","eng")
 ```
 
-```
-## [1] "LC_COLLATE=English_United Kingdom.1252;LC_CTYPE=English_United Kingdom.1252;LC_MONETARY=English_United Kingdom.1252;LC_NUMERIC=C;LC_TIME=English_United Kingdom.1252"
-```
+## Loading and preprocessing the data
+setting __filePath__ and reading the table:
 
 ```r
 filePath <- "activity.csv"
@@ -28,7 +42,7 @@ stepsPerDay <- tapply(activity$steps,activity$date, sum)
 hist(stepsPerDay,col='red',main = "Histogram of steps per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 __mean__ steps per day: 
 
@@ -67,7 +81,7 @@ plot(meanStepsPerInterval,
      main = "Average interval activity due day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
 
 5-minute interval contains the maximum number of steps:
 
@@ -110,7 +124,7 @@ stepsPerDay.complete <- tapply(activity.complete$steps,activity.complete$date, s
 hist(stepsPerDay.complete, col='red')
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
 
 ####Mean and median after filling missing value
 new __mean__:
@@ -142,37 +156,18 @@ Creating new factor variable __day__:
 ```r
 activity$day <- "weekday"
 activity$day[weekdays(activity$date) %in% c("Saturday","Sunday")] <- "weekend"
-
-# splitting activity by day variable
-activityByDay <-split(activity,activity$day)
+activity$day <- as.factor(activity$day) 
+# grouping activity by day and interval
+activityByDay <- group_by(activity, day,interval)
+activityByDay <-summarise(activityByDay,steps=sum(steps,na.rm=T))
 ```
 
 Plotting number of steps depending on day of week
 
 
 ```r
-library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
-library(ggplot2)
-activityByDay <- group_by(activity, day,interval)
-activityByDay <-summarise(activityByDay,steps=sum(steps,na.rm=T))
 qplot(interval,steps,data=activityByDay,facets=day~.,geom="line")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-13-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
 

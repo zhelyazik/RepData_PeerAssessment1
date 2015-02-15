@@ -4,12 +4,17 @@ output:
   html_document:
     keep_md: true
 ---
-
+Loading librarys and setting some settings
+```{r, results='hide'}
+library(dplyr)
+library(ggplot2)
+Sys.setlocale("LC_ALL","eng")
+```
 
 ## Loading and preprocessing the data
 setting __filePath__ and reading the table:
 ```{r }
-Sys.setlocale("LC_ALL","eng")
+
 filePath <- "activity.csv"
 activity <- read.table(filePath, na.strings='NA', sep=',', header=T, 
                        colClasses=c("numeric","Date","numeric") )
@@ -100,18 +105,16 @@ Creating new factor variable __day__:
 ```{r }
 activity$day <- "weekday"
 activity$day[weekdays(activity$date) %in% c("Saturday","Sunday")] <- "weekend"
+activity$day <- as.factor(activity$day) 
+# grouping activity by day and interval
+activityByDay <- group_by(activity, day,interval)
+activityByDay <-summarise(activityByDay,steps=sum(steps,na.rm=T))
 
-# splitting activity by day variable
-activityByDay <-split(activity,activity$day)
 ```
 
 Plotting number of steps depending on day of week
 
 ```{r }
-library(dplyr)
-library(ggplot2)
-activityByDay <- group_by(activity, day,interval)
-activityByDay <-summarise(activityByDay,steps=sum(steps,na.rm=T))
 qplot(interval,steps,data=activityByDay,facets=day~.,geom="line")
 
 ```
